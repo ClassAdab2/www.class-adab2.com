@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کلاس ادب 2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+        }
+        nav {
+            margin: 10px 0;
+        }
+        nav button {
+            margin: 0 5px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        section {
+            margin: 20px;
+        }
+        input[type="text"], button {
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            background-color: #f9f9f9;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        li strong {
+            flex-grow: 1;
+            text-align: left;
+        }
+        #chat-box {
+            border: 1px solid #ddd;
+            padding: 10px;
+            height: 200px;
+            overflow-y: auto;
+            text-align: left;
+        }
+        #chat-box p {
+            margin: 5px;
+            padding: 8px;
+            background-color: #e6e6e6;
+            border-radius: 5px;
+        }
+        .media-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+        video, img {
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>خوش آمدید به کلاس ادب 2</h1>
+        <nav>
+            <button onclick="showPage('home')">خانه</button>
+            <button onclick="showPage('about')">درباره ما</button>
+            <button onclick="showPage('students')">اسامی دانش‌آموزان</button>
+            <button onclick="showPage('library')">کتابخانه</button>
+            <button onclick="showPage('activities')">فعالیت‌های کلاس</button>
+            <button onclick="showPage('presentation')">متن ارائه</button>
+            <button onclick="showPage('upload')">ارائه فایل</button>
+            <button onclick="showPage('chat')">چت</button>
+        </nav>
+    </header>
+
+    <section id="home" class="page">
+        <h2>صفحه اصلی</h2>
+        <p contenteditable="false">به سایت کلاس ادب 2 خوش آمدید.</p>
+    </section>
+
+    <section id="about" class="page" style="display:none;">
+        <h2>درباره ما</h2>
+        <p contenteditable="false">این کلاس به یادگیری و بهبود مهارت‌های ادبی پرداخته و فضایی مناسب برای همکاری و تبادل نظر ایجاد می‌کند.</p>
+    </section>
+
+    <section id="students" class="page" style="display:none;">
+        <h2>اسامی دانش‌آموزان</h2>
+        <ul id="student-list">
+            <li contenteditable="false">علی</li>
+            <li contenteditable="false">زهرا</li>
+            <li contenteditable="false">حسین</li>
+            <li contenteditable="false">سارا</li>
+        </ul>
+    </section>
+
+    <section id="library" class="page" style="display:none;">
+        <h2>کتابخانه کلاس</h2>
+        <form id="library-form">
+            <label for="book-title">عنوان کتاب:</label>
+            <input type="text" id="book-title" placeholder="عنوان کتاب"><br>
+            <label for="book-author">نویسنده کتاب:</label>
+            <input type="text" id="book-author" placeholder="نویسنده"><br>
+            <button type="button" onclick="addBook()">اضافه کردن کتاب</button>
+        </form>
+
+        <h3>کتاب‌های موجود:</h3>
+        <ul id="library-list"></ul>
+    </section>
+
+    <section id="activities" class="page" style="display:none;">
+        <h2>فعالیت‌های کلاس</h2>
+        <form id="activity-form">
+            <label for="activity-desc">شرح فعالیت:</label>
+            <input type="text" id="activity-desc" placeholder="شرح فعالیت"><br>
+            <button type="button" onclick="addActivity()">افزودن فعالیت</button>
+        </form>
+
+        <h3>فعالیت‌های انجام شده:</h3>
+        <ul id="activity-list"></ul>
+
+        <h3>اضافه کردن عکس و ویدئو:</h3>
+        <form id="media-form">
+            <label for="media-file">انتخاب فایل (عکس یا ویدئو):</label>
+            <input type="file" id="media-file" accept="image/*,video/*"><br>
+            <button type="button" onclick="addMedia()">اضافه کردن فایل</button>
+        </form>
+
+        <h3>فایل‌های اضافه شده:</h3>
+        <div id="media-list" class="media-container"></div>
+    </section>
+
+    <section id="presentation" class="page" style="display:none;">
+        <h2>متن ارائه</h2>
+        <textarea id="presentation-text" rows="10" cols="50" placeholder="متن ارائه خود را وارد کنید"></textarea><br>
+        <button onclick="savePresentation()">ذخیره متن ارائه</button>
+
+        <h3>متن ذخیره شده:</h3>
+        <p id="saved-presentation"></p>
+    </section>
+
+    <section id="upload" class="page" style="display:none;">
+        <h2>آپلود و مشاهده فایل پاورپوینت</h2>
+        <form id="upload-form">
+            <label for="file-upload">انتخاب فایل پاورپوینت:</label>
+            <input type="file" id="file-upload" accept=".pptx"><br>
+            <label for="file-title">عنوان فایل:</label>
+            <input type="text" id="file-title" placeholder="عنوان فایل"><br>
+            <button type="button" onclick="uploadFile()">آپلود فایل</button>
+        </form>
+
+        <h3>فایل‌های آپلود شده:</h3>
+        <ul id="file-list"></ul>
+    </section>
+
+    <section id="chat" class="page" style="display:none;">
+        <h2>چت</h2>
+        <div id="chat-box"></div>
+        <input type="text" id="chat-input" placeholder="پیام خود را بنویسید...">
+        <button onclick="sendMessage()">ارسال</button>
+    </section>
+
+    <script>
+        function showPage(page) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(p => p.style.display = 'none');
+            document.getElementById(page).style.display = 'block';
+        }
+
+        function addBook() {
+            const title = document.getElementById('book-title').value;
+            const author = document.getElementById('book-author').value;
+
+            if (title && author) {
+                const li = document.createElement('li');
+                li.textContent = `${title} - ${author}`;
+                document.getElementById('library-list').appendChild(li);
+            } else {
+                alert('لطفاً تمام فیلدها را پر کنید.');
+            }
+        }
+
+        function addActivity() {
+            const desc = document.getElementById('activity-desc').value;
+            if (desc) {
+                const li = document.createElement('li');
+                li.textContent = desc;
+                document.getElementById('activity-list').appendChild(li);
+            } else {
+                alert('لطفاً شرح فعالیت را وارد کنید.');
+            }
+        }
+
+        function savePresentation() {
+            const text = document.getElementById('presentation-text').value;
+            if (text) {
+                document.getElementById('saved-presentation').textContent = text;
+                alert("متن ارائه ذخیره شد.");
+            } else {
+                alert("لطفاً متن ارائه را وارد کنید.");
+            }
+        }
+
+        function uploadFile() {
+            const file = document.getElementById('file-upload').files[0];
+            const title = document.getElementById('file-title').value;
+
+            if (file && title) {
+                const li = document.createElement('li');
+                li.textContent = title;
+                document.getElementById('file-list').appendChild(li);
+            } else {
+                alert('لطفاً عنوان و فایل را وارد کنید.');
+            }
+        }
+
+        function addMedia() {
+            const fileInput = document.getElementById('media-file');
+            const file = fileInput.files[0];
+
+            if (file) {
+                const li = document.createElement('li');
+                const fileURL = URL.createObjectURL(file);
+
+                if (file.type.startsWith('image/')) {
+                    const img = document.createElement('img');
+                    img.src = fileURL;
+                    img.alt = "عکس";
+                    img.style.maxWidth = "400px"; // تنظیم اندازه عکس
+                    li.appendChild(img);
+                } else if (file.type.startsWith('video/')) {
+                    const video = document.createElement('video');
+                    video.src = fileURL;
+                    video.controls = true; // دکمه‌های کنترلی ویدئو
+                    video.style.maxWidth = "400px"; // تنظیم اندازه ویدئو
+                    li.appendChild(video);
+                }
+                
+                document.getElementById('media-list').appendChild(li);
+            } else {
+                alert('لطفاً یک فایل انتخاب کنید.');
+            }
+        }
+
+        function sendMessage() {
+            const message = document.getElementById('chat-input').value;
+            if (message.trim() !== '') {
+                const chatBox = document.getElementById('chat-box');
+                const p = document.createElement('p');
+                p.textContent = message;
+                chatBox.appendChild(p);
+                document.getElementById('chat-input').value = '';
+                chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+            } else {
+                alert('لطفاً یک پیام وارد کنید.');
+            }
+        }
+    </script>
+</body>
+</html>
